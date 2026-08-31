@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>QuickDrop — control</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%232b6a6d'/%3E%3Cpath d='M12 5v9m0 0-3.5-3.5M12 14l3.5-3.5' stroke='%23f6f3ec' stroke-width='2.2' stroke-linecap='round' fill='none'/%3E%3Cpath d='M6 15v1.5A2.5 2.5 0 0 0 8.5 19h7a2.5 2.5 0 0 0 2.5-2.5V15' stroke='%23f6f3ec' stroke-width='2.2' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f6f3ec;
+    --card: #fffdf8;
+    --ink: #262219;
+    --muted: #7d7561;
+    --faint: #a9a08a;
+    --line: #e5dfd0;
+    --teal: #2b6a6d;
+    --ok: #2f8a5c;
+    --ok-soft: #e6f2ea;
+    --err: #b04a35;
+    --err-soft: #f8ebe6;
+    --warn: #a06a1f;
+    --warn-soft: #f8eeda;
+    --shadow: 0 14px 30px rgba(96, 83, 54, 0.12);
+    --shadow-sm: 0 2px 6px rgba(96, 83, 54, 0.08);
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      'Helvetica Neue', Arial, sans-serif;
+    background:
+      radial-gradient(90% 42% at 50% -6%, rgba(43, 106, 109, 0.07), transparent 60%),
+      var(--paper);
+    color: var(--ink);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 26px 20px;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1 { font-size: 1.3rem; font-weight: 680; letter-spacing: -0.01em; margin: 0 0 6px; }
+  .note { color: var(--muted); text-align: center; line-height: 1.5; }
+  .qrwrap {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    padding: 16px;
+    margin: 16px 0;
+  }
+  .qrwrap img {
+    width: 260px; height: 260px;
+    display: block;
+    image-rendering: pixelated;
+    background: #fff;
+    border-radius: 10px;
+  }
+  .mono {
+    font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Roboto Mono', ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .url { color: var(--muted); font-size: .82rem; word-break: break-all; text-align: center; margin: 0; }
+  .dest { color: var(--muted); font-size: .82rem; margin: 10px 0 0; }
+  h2 {
+    font-size: .74rem;
+    font-weight: 650;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--faint);
+    align-self: flex-start;
+    width: 100%;
+    max-width: 520px;
+    margin: 8px 0 10px;
+  }
+  #list { width: 100%; max-width: 520px; }
+  .row {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow-sm);
+    padding: 13px 15px;
+    margin-bottom: 10px;
+    animation: rise 0.26s ease both;
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .row .name { font-weight: 600; letter-spacing: -0.005em; }
+  .row .status { color: var(--muted); font-size: .85rem; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .bar {
+    height: 7px;
+    background: var(--line);
+    border-radius: 6px;
+    margin-top: 11px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar > i {
+    display: block;
+    height: 100%;
+    width: 0%;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--teal), #3d8a8d);
+    transition: width 0.18s ease;
+  }
+  .row.done { border-color: transparent; background: var(--ok-soft); }
+  .row.done .bar > i { background: var(--ok); }
+  .row.done .status { color: var(--ok); }
+  .row.error { border-color: transparent; background: var(--err-soft); }
+  .row.error .bar > i { background: var(--err); }
+  .row.error .status { color: var(--err); }
+  .isolation {
+    width: 100%;
+    max-width: 520px;
+    background: var(--warn-soft);
+    color: var(--warn);
+    border-radius: 14px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: .9rem;
+    font-weight: 550;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+  <h1>QuickDrop</h1>
+  <p class="note">Open your phone's camera and point it at this code,<br>then pick files on the phone.</p>
+  <div class="qrwrap"><img id="qr" alt="QR code"></div>
+  <p class="url mono" id="url"></p>
+  <p class="dest" id="dest"></p>
+  <h2>Receiving…</h2>
+  <div id="list"></div>
+
+<script>
+  document.getElementById('qr').src = 'QR_PLACEHOLDER';
+  document.getElementById('url').textContent = 'URL_PLACEHOLDER';
+  document.getElementById('dest').textContent = 'Files land in: DEST_PLACEHOLDER';
+
+  var rows = {};
+  var list = document.getElementById('list');
+  var es = new EventSource('EVENTS_PLACEHOLDER');
+
+  es.onmessage = function (ev) {
+    var d;
+    try { d = JSON.parse(ev.data); } catch (e) { return; }
+    if (d.type === 'session-stopped') return;
+    var row = rows[d.uploadId];
+    if (!row) {
+      row = document.createElement('div');
+      row.className = 'row';
+      row.innerHTML = '<div class="name"></div><div class="bar"><i></i></div><div class="status"></div>';
+      row.querySelector('.name').textContent = d.filename || 'Unknown';
+      list.appendChild(row);
+      rows[d.uploadId] = row;
+    }
+    var bar = row.querySelector('.bar > i');
+    var status = row.querySelector('.status');
+    if (d.type === 'file-error') {
+      row.classList.add('error');
+      bar.style.width = '100%';
+      status.textContent = d.message || 'Failed';
+    } else if (d.type === 'file-done') {
+      row.classList.add('done');
+      bar.style.width = '100%';
+      status.textContent = 'Done' + (d.finalName && d.finalName !== d.filename ? ' (saved as ' + d.finalName + ')' : '');
+    } else if (d.type === 'progress') {
+      if (d.total > 0) {
+        bar.style.width = Math.round(d.bytes / d.total * 100) + '%';
+        status.textContent = Math.round(d.bytes / d.total * 100) + '% of ' + (d.total / 1048576).toFixed(1) + ' MB';
+      }
+    } else if (d.type === 'isolation') {
+      var info = document.createElement('p');
+      info.className = 'isolation';
+      info.textContent = d.message;
+      document.body.insertBefore(info, list);
+    }
+  };
+</script>
+</body>
+</html>

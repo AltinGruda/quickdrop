@@ -1,0 +1,13 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "quickdrop",
+  "outputfilename": "QuickDrop",
+  "frontend:install": "echo skip",
+  "frontend:build": "echo skip",
+  "frontend:dev:watcher": "cmd /c exit 0",
+  "frontend:dev:serverUrl": "",
+  "author": {
+    "name": "QuickDrop",
+    "email": ""
+  }
+}
