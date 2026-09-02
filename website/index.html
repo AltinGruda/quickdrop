@@ -6,6 +6,98 @@
 <title>QuickDrop - Send files from your phone to your computer</title>
 <meta name="description" content="QuickDrop moves files from your phone to your PC over your home Wi-Fi. No app on the phone, no cables, no accounts. Scan a code, pick files, done.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%232563eb'/%3E%3Cg fill='%23fff'%3E%3Crect x='8' y='8' width='8' height='8'/%3E%3Crect x='24' y='8' width='8' height='8'/%3E%3Crect x='8' y='24' width='8' height='8'/%3E%3Crect x='24' y='24' width='3' height='3'/%3E%3Crect x='28' y='28' width='3' height='3'/%3E%3Crect x='24' y='32' width='3' height='3'/%3E%3Crect x='16' y='16' width='2' height='2'/%3E%3Crect x='19' y='19' width='2' height='2'/%3E%3Crect x='22' y='16' width='2' height='2'/%3E%3Crect x='16' y='22' width='2' height='2'/%3E%3Crect x='14' y='14' width='2' height='2'/%3E%3Crect x='24' y='16' width='2' height='2'/%3E%3Crect x='16' y='30' width='2' height='2'/%3E%3Crect x='19' y='30' width='2' height='2'/%3E%3Crect x='14' y='26' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://altingruda.github.io/quickdrop/#app",
+      "name": "QuickDrop",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Windows 10, Windows 11, macOS",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Move files from your phone to your computer over your home Wi-Fi. No app on the phone, no cables, no accounts. Scan a code, pick your files, and they land on your computer.",
+      "screenshot": "https://altingruda.github.io/quickdrop/"
+    },
+    {
+      "@type": "Product",
+      "name": "QuickDrop",
+      "description": "A desktop app that turns your computer into a local-only file receiver. Scan a QR code with your phone and files land on your desktop over your home Wi-Fi, with no app on the phone.",
+      "brand": { "@type": "Brand", "name": "QuickDrop" },
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD", "availability": "https://schema.org/InStock" }
+    },
+    {
+      "@type": "Organization",
+      "name": "QuickDrop",
+      "url": "https://altingruda.github.io/quickdrop/",
+      "logo": "https://altingruda.github.io/quickdrop/logo.svg",
+      "sameAs": [ "https://github.com/AltinGruda/quickdrop" ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Do I need to install anything on my phone?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. You scan a code with your phone's camera and a plain browser page opens to pick your files. Nothing to install, update, or allow on the phone."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Will my photos or videos be compressed?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Files keep their original quality and names. Nothing is re-encoded."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Where do my files end up?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "In your computer's Downloads folder. Nothing is overwritten, and a file only appears once it is fully transferred."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I know a file finished correctly?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A file is checked against its original before it's saved. It only appears when it's complete, so you never get a half-finished or corrupted download."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are there any file size limits?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. There are no file size limits. Large videos stream straight to your computer, and transfers pick up where they stopped instead of restarting."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does QuickDrop cost anything?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. QuickDrop is free to download and use on Windows 10, Windows 11, and macOS, with no account needed."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do my files go over the internet?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Files transfer directly from your phone to your computer over your home Wi-Fi. Nothing is uploaded to a cloud or a QuickDrop server."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
 <style>
   /* ---------- fonts (self-hosted) ---------- */
   @font-face {
@@ -269,6 +361,19 @@
   .sec-head h2 { margin: 12px 0 0; font-size: clamp(30px, 3.6vw, 44px); letter-spacing: -.025em; line-height: 1.08; font-weight: 800; }
   .sec-head p { margin: 16px 0 0; font-size: 17px; color: var(--muted); max-width: 44ch; }
 
+  /* ---------- faq ---------- */
+  .faqsec .faq { max-width: 720px; margin: 0 auto; }
+  .faq { display: grid; gap: 12px; }
+  .faq details {
+    background: var(--surface); border: 1px solid var(--line-soft); border-radius: var(--r-card);
+    padding: 20px 24px; box-shadow: var(--shadow-1);
+  }
+  .faq summary { cursor: pointer; font-weight: 600; font-size: 16px; color: var(--ink); list-style: none; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; float: right; font-weight: 400; color: var(--accent); font-size: 20px; line-height: 1; }
+  .faq details[open] summary::after { content: "\2013"; }
+  .faq details p { margin: 12px 0 0; font-size: 15px; color: var(--muted); max-width: 60ch; }
+
   /* ---------- how it works ---------- */
   .how { background: var(--bg-2); }
   .steps { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; position: relative; }
@@ -344,8 +449,7 @@
   .fact-list li svg { width: 17px; height: 17px; stroke: var(--ok); flex: none; margin-top: 2px; }
 
   /* ---------- privacy ---------- */
-  .privacy { background: var(--bg-2); }
-  .privacy-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 56px; align-items: center; }
+  .privacy { background: var(--bg-2); }  .privacy-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 56px; align-items: center; }
   .big-quote { font-size: clamp(28px, 3.6vw, 44px); font-weight: 800; letter-spacing: -.025em; line-height: 1.12; margin: 0; }
   .big-quote em { font-style: italic; color: var(--accent); }
   .facts { display: grid; grid-template-columns: 1fr; gap: 18px; }
@@ -370,9 +474,37 @@
     color: var(--muted); border: 1px solid var(--line-soft); border-radius: var(--r-pill); padding: 6px 12px;
   }
 
+  /* ---------- story ---------- */
+  .story { background: var(--bg); }
+  .story-card {
+    max-width: 720px; margin: 0 auto; text-align: center;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-card);
+    padding: 56px 40px; box-shadow: var(--shadow-1);
+  }
+  .story-card h2 { margin: 16px auto 0; font-size: clamp(26px, 3.4vw, 38px); letter-spacing: -.025em; line-height: 1.12; max-width: 24ch; }
+  .story-card p { margin: 18px auto 0; font-size: 16.5px; color: var(--muted); max-width: 54ch; line-height: 1.6; }
+  .story-card p + p { margin-top: 12px; }
+
+  /* ---------- capture ---------- */
+  .capture {
+    margin-top: 36px; padding-top: 30px; border-top: 1px solid var(--line-soft);
+  }
+  .capture-inner { max-width: 460px; margin: 0 auto; }
+  .capture-form { display: flex; gap: 10px; margin-top: 18px; }
+  .capture-form input {
+    flex: 1; min-width: 0;
+    padding: 13px 16px; font: inherit; font-size: 15px; color: var(--ink);
+    background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--r-btn);
+    transition: border-color .15s, background-color .15s;
+  }
+  .capture-form input:focus { outline: none; border-color: var(--accent); background: var(--surface); }
+  .capture-form input::placeholder { color: var(--muted); }
+  .capture-ok { margin: 14px 0 0; font-size: 14px; font-weight: 600; color: var(--ok); }
+  .capture-err { margin: 14px 0 0; font-size: 14px; font-weight: 600; color: #dc2626; }
+
   /* ---------- footer ---------- */
   footer { border-top: 1px solid var(--line-soft); padding: 56px 0 40px; }
-  .foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 40px; }
+  .foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; }
   .foot-brand .brand { font-size: 16px; }
   .foot-brand p { margin: 14px 0 0; font-size: 13.5px; color: var(--muted); max-width: 34ch; }
   footer h4 { margin: 0 0 14px; font-size: 12px; font-family: "Geist Mono", ui-monospace, monospace; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
@@ -441,7 +573,8 @@
     <div class="nav-links">
       <a href="#how">How it works</a>
       <a href="#why">Why QuickDrop</a>
-      <a href="#privacy">Privacy</a>
+      <a href="#faq">FAQ</a>
+      <a href="./privacy.html">Privacy</a>
     </div>
     <div class="nav-actions">
       <button class="icon-btn" id="themeToggle" aria-label="Switch color theme">
@@ -458,8 +591,8 @@
   <!-- ============ HERO ============ -->
   <section class="wrap hero" aria-label="Intro">
     <div class="hero-copy">
-      <h1>Your files to your PC in <em>one scan.</em></h1>
-      <p class="hero-sub">No app on your phone. No cables, no accounts. Scan the code, pick your files, and they land on your computer.</p>
+      <h1>Stop emailing yourself files to get them on your PC.</h1>
+      <p class="hero-sub">No app on your phone. No cables, no accounts. Scan the code, pick your files, and they&rsquo;re on your computer.</p>
       <div class="hero-cta">
         <a class="btn btn-primary btn-lg dl-win" href="https://github.com/AltinGruda/quickdrop/releases/download/v0.1.1/QuickDrop-setup.exe">Download for Windows</a>
         <a class="btn btn-ghost btn-lg dl-mac" href="https://github.com/AltinGruda/quickdrop/releases/download/v0.1.1/QuickDrop.dmg">Download for macOS</a>
@@ -620,6 +753,18 @@
     </div>
   </section>
 
+  <!-- ============ STORY ============ -->
+  <section class="story" id="story">
+    <div class="wrap">
+      <div class="story-card reveal">
+        <div class="kicker">Why it&rsquo;s built this way</div>
+        <h2>Built for someone who shouldn&rsquo;t have to figure it out.</h2>
+        <p>QuickDrop started with a father who kept emailing himself the photos and documents he needed to get off his phone. A photo to his email, then a download on his desktop, over and over.</p>
+        <p>There had to be a simpler way. Something with no app to install, no account to make, no steps to remember. Just scan a code and choose. That&rsquo;s the whole idea behind QuickDrop.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ PRIVACY ============ -->
   <section class="privacy" id="privacy">
     <div class="wrap privacy-grid">
@@ -645,6 +790,46 @@
     </div>
   </section>
 
+  <!-- ============ FAQ ============ -->
+  <section class="faqsec" id="faq">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <h2>Questions, answered before you ask.</h2>
+        <p>The things people want to know before they download.</p>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>Do I need to install anything on my phone?</summary>
+          <p>No. You scan a code with your phone&#8217;s camera and a plain browser page opens to pick your files. Nothing to install, update, or allow on the phone.</p>
+        </details>
+        <details>
+          <summary>Will my photos or videos be compressed?</summary>
+          <p>No. Files keep their original quality and names. Nothing is re-encoded.</p>
+        </details>
+        <details>
+          <summary>Where do my files end up?</summary>
+          <p>In your computer&#8217;s Downloads folder. Nothing is overwritten, and a file only appears once it is fully transferred.</p>
+        </details>
+        <details>
+          <summary>How do I know a file finished correctly?</summary>
+          <p>A file is checked against its original before it&#8217;s saved. It only appears when it&#8217;s complete, so you never get a half-finished or corrupted download.</p>
+        </details>
+        <details>
+          <summary>Are there any file size limits?</summary>
+          <p>No. There are no file size limits. Large videos stream straight to your computer, and transfers pick up where they stopped instead of restarting.</p>
+        </details>
+        <details>
+          <summary>Does QuickDrop cost anything?</summary>
+          <p>No. It&#8217;s free to download and use on Windows 10, Windows 11, and macOS, with no account needed.</p>
+        </details>
+        <details>
+          <summary>Do my files go over the internet?</summary>
+          <p>No. Files transfer directly from your phone to your computer over your home Wi-Fi. Nothing is uploaded to a cloud or a QuickDrop server.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ GET ============ -->
   <section id="get">
     <div class="wrap">
@@ -662,6 +847,19 @@
         </div>
         <p class="get-note">Comes as a single installer. No accounts, no setup, no terminal.</p>
         <p class="get-note" style="margin-top:8px">macOS: right-click the app and choose "Open" the first time (unsigned app).</p>
+
+        <div class="capture" id="capture">
+          <div class="capture-inner">
+            <h3 style="margin:0;font-size:18px;letter-spacing:-.01em">Need it on another system, or want to hear when it improves?</h3>
+            <p style="margin:8px 0 0;color:var(--muted);font-size:14.5px">Leave your email and we&rsquo;ll let you know about new versions and fixes. No spam, unsubscribe anytime.</p>
+            <form class="capture-form" id="captureForm" novalidate>
+              <input type="email" id="captureEmail" name="email" placeholder="you@example.com" autocomplete="email" required>
+              <button type="submit" class="btn btn-primary">Notify me</button>
+            </form>
+            <p class="capture-ok" id="captureOk" hidden>Thanks! We&rsquo;ll email you when there&rsquo;s something new.</p>
+            <p class="capture-err" id="captureErr" hidden>Please enter a valid email address.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -692,11 +890,20 @@
         </ul>
       </div>
       <div>
+        <h4>Compare</h4>
+        <ul class="foot-links">
+          <li><a href="./alternatives/localsend.html">QuickDrop vs LocalSend</a></li>
+          <li><a href="./alternatives/snapdrop.html">QuickDrop vs Snapdrop &amp; PairDrop</a></li>
+          <li><a href="./use-cases/photos-to-pc.html">Get photos off your phone</a></li>
+        </ul>
+      </div>
+      <div>
         <h4>The honest notes</h4>
         <ul class="foot-links" style="max-width:34ch">
           <li><a href="#privacy">Sessions are not encrypted</a></li>
           <li><a href="#privacy">Home Wi-Fi is the sweet spot</a></li>
           <li><a href="#privacy">You own your files, always</a></li>
+          <li><a href="./privacy.html">Privacy &amp; Terms</a></li>
         </ul>
       </div>
     </div>
@@ -925,6 +1132,24 @@
 
     pick.addEventListener("click", start);
     ctlBtn.addEventListener("click", start);
+  })();
+
+  /* ---------------- email capture ---------------- */
+  (function () {
+    var form = document.getElementById("captureForm");
+    if (!form) return;
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var input = document.getElementById("captureEmail");
+      var ok = document.getElementById("captureOk");
+      var err = document.getElementById("captureErr");
+      var value = (input.value || "").trim();
+      var valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+      err.hidden = valid;
+      if (!valid) { input.focus(); return; }
+      ok.hidden = false;
+      form.style.display = "none";
+    });
   })();
 
   /* ---------------- download links (latest release) ---------------- */

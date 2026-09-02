@@ -16,3 +16,9 @@ node_modules/
 # OS
 .DS_Store
 Thumbs.db
+
+.agents
+
+TEACHING-NOTES.md
+MARKETING-PLAN.md
+CUSTOMER-RESEARCH.md

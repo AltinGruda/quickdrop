@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy &amp; Terms | QuickDrop</title>
+<meta name="description" content="QuickDrop's privacy policy and terms of use. Files transfer locally over your Wi-Fi, with no cloud, no account, no data collected by us.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%232563eb'/%3E%3Cg fill='%23fff'%3E%3Crect x='8' y='8' width='8' height='8'/%3E%3Crect x='24' y='8' width='8' height='8'/%3E%3Crect x='8' y='24' width='8' height='8'/%3E%3Crect x='24' y='24' width='3' height='3'/%3E%3Crect x='28' y='28' width='3' height='3'/%3E%3Crect x='24' y='32' width='3' height='3'/%3E%3Crect x='16' y='16' width='2' height='2'/%3E%3Crect x='19' y='19' width='2' height='2'/%3E%3Crect x='22' y='16' width='2' height='2'/%3E%3Crect x='16' y='22' width='2' height='2'/%3E%3Crect x='14' y='14' width='2' height='2'/%3E%3Crect x='24' y='16' width='2' height='2'/%3E%3Crect x='16' y='30' width='2' height='2'/%3E%3Crect x='19' y='30' width='2' height='2'/%3E%3Crect x='14' y='26' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E">
+<style>
+  @font-face {
+    font-family: "Geist";
+    src: url("./fonts/geist-latin-400.woff2") format("woff2");
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: "Geist";
+    src: url("./fonts/geist-latin-600.woff2") format("woff2");
+    font-weight: 600; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: "Geist";
+    src: url("./fonts/geist-latin-800.woff2") format("woff2");
+    font-weight: 800; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: "Geist Mono";
+    src: url("./fonts/geistmono-latin-500.woff2") format("woff2");
+    font-weight: 500; font-style: normal; font-display: swap;
+  }
+
+  :root {
+    --bg: #f9f9fa; --bg-2: #f2f2f4; --surface: #ffffff;
+    --ink: #18181b; --ink-soft: #3f3f46; --muted: #52525b;
+    --line: #e4e4e7; --line-soft: #eeeeef;
+    --accent: #2563eb; --accent-hover: #1d4ed8; --accent-tint: #eaf0fe;
+    --r-card: 18px; --shadow-1: 0 1px 2px rgba(24,24,27,.05), 0 10px 28px -14px rgba(24,24,27,.14);
+  }
+  [data-theme="dark"] {
+    --bg: #0b0b0d; --bg-2: #111114; --surface: #151518;
+    --ink: #f4f4f5; --ink-soft: #d4d4d8; --muted: #a1a1aa;
+    --line: #26262b; --line-soft: #1d1d21;
+    --accent: #3b82f6; --accent-hover: #60a5fa; --accent-tint: #111f3d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-hover); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+
+  .nav { position: sticky; top: 0; z-index: 40; background: var(--bg);
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: saturate(1.4) blur(12px); -webkit-backdrop-filter: saturate(1.4) blur(12px);
+    border-bottom: 1px solid var(--line-soft); }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 17px; letter-spacing: -.01em; text-decoration: none; color: var(--ink); }
+  .brand-mark { width: 30px; height: 30px; border-radius: 8px; background: var(--accent); display: grid; place-items: center; }
+  .brand-mark svg { width: 18px; height: 18px; }
+  .back { font-size: 14px; font-weight: 600; color: var(--muted); }
+  .back:hover { color: var(--ink); }
+
+  main { padding: 56px 0 88px; }
+  h1 { font-size: clamp(34px, 5vw, 48px); letter-spacing: -.03em; line-height: 1.1; margin: 0 0 8px; }
+  .updated { font-family: "Geist Mono", ui-monospace, monospace; font-size: 12px; color: var(--muted); margin: 0 0 40px; }
+  h2 { font-size: 22px; letter-spacing: -.02em; margin: 44px 0 12px; }
+  h3 { font-size: 17px; margin: 26px 0 8px; }
+  p, li { font-size: 15.5px; color: var(--ink-soft); }
+  ul { padding-left: 20px; }
+  li { margin: 6px 0; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-card); box-shadow: var(--shadow-1); margin-top: 24px; padding: 32px 36px; }
+  .muted { color: var(--muted); font-size: 14px; }
+  footer { border-top: 1px solid var(--line-soft); padding: 40px 0; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  footer p { margin: 0; font-size: 13px; color: var(--muted); }
+  @media (max-width: 560px) { .card { padding: 24px 20px; } }
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="Main">
+  <div class="wrap nav-inner">
+    <a class="brand" href="./index.html">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="#fff" shape-rendering="crispEdges" aria-hidden="true">
+          <path d="M8 8h8v8H8zm16 0h8v8h-8zm-16 16h8v8H8zm16 0h3v3h-3zm4 4h3v3h-3zm-4 4h3v3h-3zM16 16h2v2h-2zm3 3h2v2h-2zm3-3h2v2h-2zm-6 6h2v2h-2zm-2-8h2v2h-2zm10 2h2v2h-2zm-8 12h2v2h-2zm3 0h2v2h-2zm-5-4h2v2h-2z"/>
+        </svg>
+      </span>
+      QuickDrop
+    </a>
+    <a class="back" href="./index.html">&larr; Back to home</a>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap">
+    <h1>Privacy &amp; Terms</h1>
+    <p class="updated">Last updated: September 3, 2026</p>
+
+    <p>QuickDrop is a small desktop app that moves files from your phone to your computer over your own home Wi&#8209;Fi. This page explains a simple, honest policy: what the app and website do and don&#8217;t collect, and the rules for using them.</p>
+
+    <div class="card">
+      <h2>Privacy Policy</h2>
+
+      <h3>The short version</h3>
+      <p>QuickDrop is built around the idea that files should stay between your own devices. It has no cloud, no accounts, no servers, and we don&#8217;t collect or sell anything. Below are the specific details.</p>
+
+      <h3>File transfers stay local</h3>
+      <p>When you use the app, files go directly from your phone to your computer over your local network (usually your home Wi&#8209;Fi). They are not uploaded to any QuickDrop service, not stored by us, and not routed through the internet. When a transfer is complete, the file lives on your computer and nowhere else.</p>
+
+      <h3>What the app collects</h3>
+      <p>Nothing, by design. The app does not create an account, does not phone home, and collects no usage data, analytics, or personal information. There is no telemetry.</p>
+
+      <h3>What the website collects</h3>
+      <ul>
+        <li><strong>Color theme preference.</strong> If you switch between the light and dark look of this website, that single setting is stored locally in your browser. It is not sent to us.</li>
+        <li><strong>Email address (only if you subscribe).</strong> If you use the optional <a href="./index.html#capture">email signup</a> on the homepage, we receive the email address you enter and we use it only to send you updates about QuickDrop. You can unsubscribe at any time, and we never rent or sell your address.</li>
+      </ul>
+
+      <h3>Honest limitations</h3>
+      <p>File sessions are not encrypted. Because a transfer is opened by scanning a code, anyone who has that code while the session is live can send files. We recommend using QuickDrop face to face on a network you trust, and closing the session when you&#8217;re done.</p>
+
+      <h3>Children</h3>
+      <p>QuickDrop is not directed at children under 13, and we do not knowingly collect data from them.</p>
+
+      <h3>Contact</h3>
+      <p>Questions about this policy? Open an issue on the <a href="https://github.com/AltinGruda/quickdrop" rel="noopener">QuickDrop GitHub repository</a>.</p>
+    </div>
+
+    <div class="card">
+      <h2>Terms of Use</h2>
+
+      <h3>Use of the software</h3>
+      <p>QuickDrop is provided free of charge and is open source. You may download and use it for personal or internal purposes. Redistribution and modification are governed by the open-source license included with the project.</p>
+
+      <h3>No warranties</h3>
+      <p>The software is provided &#8220;as is&#8221; without warranty of any kind, express or implied, including but not limited to warranties of merchantability or fitness for a particular purpose.</p>
+
+      <h3>Limitation of liability</h3>
+      <p>In no event shall the makers of QuickDrop be liable for any claim, damages, or other liability arising from the use of the software or this website. You use QuickDrop at your own discretion and risk.</p>
+
+      <h3>Acceptable use</h3>
+      <p>You agree not to use QuickDrop to send unlawful, harmful, or infringing content, or to interfere with the operation of the app or someone else&#8217;s network.</p>
+
+      <h3>Changes</h3>
+      <p>We may update this page from time to time. The date at the top shows when it was last revised.</p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>&copy; 2026 QuickDrop</p>
+    <p><a href="./index.html">Home</a></p>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var saved = null;
+    try { saved = localStorage.getItem("quickdrop-theme"); } catch (e) {}
+    root.setAttribute("data-theme", saved || "light");
+  })();
+</script>
+</body>
+</html>

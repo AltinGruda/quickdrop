@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get Photos Off Your Phone | QuickDrop</title>
+<meta name="description" content="The easiest way to get photos off your phone and onto your computer. Scan a code, pick your photos, and they land in your Downloads folder, with no app on the phone.">
+<link rel="canonical" href="https://altingruda.github.io/quickdrop/use-cases/photos-to-pc.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%232563eb'/%3E%3Cg fill='%23fff'%3E%3Crect x='8' y='8' width='8' height='8'/%3E%3Crect x='24' y='8' width='8' height='8'/%3E%3Crect x='8' y='24' width='8' height='8'/%3E%3Crect x='24' y='24' width='3' height='3'/%3E%3Crect x='28' y='28' width='3' height='3'/%3E%3Crect x='24' y='32' width='3' height='3'/%3E%3Crect x='16' y='16' width='2' height='2'/%3E%3Crect x='19' y='19' width='2' height='2'/%3E%3Crect x='22' y='16' width='2' height='2'/%3E%3Crect x='16' y='22' width='2' height='2'/%3E%3Crect x='14' y='14' width='2' height='2'/%3E%3Crect x='24' y='16' width='2' height='2'/%3E%3Crect x='16' y='30' width='2' height='2'/%3E%3Crect x='19' y='30' width='2' height='2'/%3E%3Crect x='14' y='26' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Will QuickDrop compress my photos?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Files keep their original quality and names. Nothing is re-encoded."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I send many photos at once?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Pick as many as you like in one go, and QuickDrop shows live progress for every file."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where do the photos end up?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In your computer's Downloads folder. Nothing is overwritten, and a file only appears once it is fully transferred."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does QuickDrop need an internet connection?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No, just a home Wi-Fi network. Your phone and computer talk directly to each other."
+        }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need an app on my phone?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Your phone just opens a normal browser page when you scan the code."
+      }
+    }
+  ]
+}
+</script>
+<style>
+  @font-face { font-family:"Geist"; src:url("../fonts/geist-latin-400.woff2") format("woff2"); font-weight:400; font-style:normal; font-display:swap; }
+  @font-face { font-family:"Geist"; src:url("../fonts/geist-latin-600.woff2") format("woff2"); font-weight:600; font-style:normal; font-display:swap; }
+  @font-face { font-family:"Geist"; src:url("../fonts/geist-latin-800.woff2") format("woff2"); font-weight:800; font-style:normal; font-display:swap; }
+  @font-face { font-family:"Geist Mono"; src:url("../fonts/geistmono-latin-500.woff2") format("woff2"); font-weight:500; font-style:normal; font-display:swap; }
+  :root {
+    --bg:#f9f9fa; --bg-2:#f2f2f4; --surface:#ffffff;
+    --ink:#18181b; --ink-soft:#3f3f46; --muted:#52525b;
+    --line:#e4e4e7; --line-soft:#eeeeef;
+    --accent:#2563eb; --accent-hover:#1d4ed8; --accent-tint:#eaf0fe;
+    --ok:#16a34a; --ok-tint:#e7f6ec;
+    --r-card:18px; --btn-bg:var(--accent); --btn-ink:#fff; --btn-hover:var(--accent-hover);
+    --shadow-1:0 1px 2px rgba(24,24,27,.05), 0 10px 28px -14px rgba(24,24,27,.14);
+  }
+  [data-theme="dark"]{
+    --bg:#0b0b0d; --bg-2:#111114; --surface:#151518;
+    --ink:#f4f4f5; --ink-soft:#d4d4d8; --muted:#a1a1aa;
+    --line:#26262b; --line-soft:#1d1d21;
+    --accent:#3b82f6; --accent-hover:#60a5fa; --accent-tint:#111f3d;
+    --ok:#22c55e; --ok-tint:#0f2318; --btn-bg:#fff; --btn-ink:#0b0b0d; --btn-hover:#d4d4d8;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;}
+  a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent-hover);}
+  .wrap{max-width:900px;margin:0 auto;padding:0 24px;}
+  .nav{position:sticky;top:0;z-index:40;background:var(--bg);background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--line-soft);}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px;}
+  .brand{display:inline-flex;align-items:center;gap:10px;font-weight:800;font-size:17px;letter-spacing:-.01em;color:var(--ink);}
+  .brand-mark{width:30px;height:30px;border-radius:8px;background:var(--accent);display:grid;place-items:center;}
+  .brand-mark svg{width:18px;height:18px;}
+  .nav-actions{display:flex;gap:12px;align-items:center;}
+  .btn{display:inline-flex;align-items:center;gap:8px;border-radius:12px;font-weight:600;font-size:14px;line-height:1;padding:13px 20px;border:1px solid transparent;cursor:pointer;transition:transform .18s,background-color .18s,box-shadow .18s;}
+  .btn-primary{background:var(--btn-bg);color:var(--btn-ink);box-shadow:0 10px 24px -12px rgba(37,99,235,.55);}
+  .btn-primary:hover{background:var(--btn-hover);transform:translateY(-1px);}
+  main{padding:64px 0 88px;}
+  .kicker{font-family:"Geist Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);}
+  h1{font-size:clamp(34px,5vw,48px);letter-spacing:-.03em;line-height:1.08;margin:16px 0 16px;}
+  .lede{font-size:18px;color:var(--muted);max-width:60ch;margin:0 0 8px;}
+  h2{font-size:26px;letter-spacing:-.02em;margin:60px 0 6px;}
+  h3{font-size:18px;margin:26px 0 8px;}
+  p,li{font-size:15.5px;color:var(--ink-soft);}
+  .steps{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:24px;}
+  .step{background:var(--surface);border:1px solid var(--line-soft);border-radius:12px;padding:22px;box-shadow:var(--shadow-1);}
+  .step .n{font-size:13px;font-weight:600;color:var(--accent);}
+  .step h3{margin:12px 0 0;font-size:18px;}
+  .step p{margin:8px 0 0;font-size:14px;color:var(--muted);}
+  .cta{margin-top:40px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .note{font-size:13px;color:var(--muted);}
+  ul{padding-left:20px;} li{margin:7px 0;}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);box-shadow:var(--shadow-1);padding:34px 38px;margin-top:28px;}
+  .faq{margin-top:16px;}
+  .faq details{border:1px solid var(--line-soft);border-radius:12px;background:var(--surface);padding:18px 22px;margin-top:12px;}
+  .faq summary{cursor:pointer;font-weight:600;font-size:15.5px;color:var(--ink);}
+  .faq details p{margin:12px 0 0;font-size:14.5px;}
+  footer{border-top:1px solid var(--line-soft);padding:40px 0;}
+  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  footer p{margin:0;font-size:13px;color:var(--muted);}
+  @media(max-width:680px){.steps{grid-template-columns:1fr;}.card{padding:24px 20px;}}
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="Main">
+  <div class="wrap nav-inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="#fff" shape-rendering="crispEdges"><path d="M8 8h8v8H8zm16 0h8v8h-8zm-16 16h8v8H8zm16 0h3v3h-3zm4 4h3v3h-3zm-4 4h3v3h-3zM16 16h2v2h-2zm3 3h2v2h-2zm3-3h2v2h-2zm-6 6h2v2h-2zm-2-8h2v2h-2zm10 2h2v2h-2zm-8 12h2v2h-2zm3 0h2v2h-2zm-5-4h2v2h-2z"/></svg></span>
+      QuickDrop
+    </a>
+    <div class="nav-actions">
+      <a class="btn btn-primary" href="https://github.com/AltinGruda/quickdrop/releases/latest/download/QuickDrop-setup.exe">Download for Windows</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap">
+    <div class="kicker">Use case</div>
+    <h1>Get your photos off your phone, without the hassle.</h1>
+    <p class="lede">No more emailing them to yourself. No more guessing which cable, or fighting a cloud service. QuickDrop puts your photos on your computer in a few seconds, and nothing is installed on your phone.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="n">01</div>
+        <h3>Open QuickDrop</h3>
+        <p>Run it on your computer. A code appears on the screen.</p>
+      </div>
+      <div class="step">
+        <div class="n">02</div>
+        <h3>Scan with your phone</h3>
+        <p>Point your phone's camera at the code. A page opens on your phone.</p>
+      </div>
+      <div class="step">
+        <div class="n">03</div>
+        <h3>Pick your photos</h3>
+        <p>Choose a few or a whole batch. They land in your Downloads folder, in original quality.</p>
+      </div>
+    </div>
+
+    <div class="cta">
+      <a class="btn btn-primary" href="https://github.com/AltinGruda/quickdrop/releases/latest/download/QuickDrop-setup.exe">Download for Windows</a>
+      <a class="btn btn-primary" href="https://github.com/AltinGruda/quickdrop/releases/latest/download/QuickDrop.dmg">Download for macOS</a>
+      <span class="note">Free. No account.</span>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-top:0">No more photo-transfer workarounds</h2>
+      <p>Most people end up stuck with awkward ways to move photos. Here's each of them, and why QuickDrop simply skips the problem:</p>
+      <ul>
+        <li><strong>Emailing yourself.</strong> Upload, then download, then delete the draft. Slow, and it fills your inbox.</li>
+        <li><strong>Wires and cables.</strong> The right cable, the right port, the right "mode." Guesswork every time.</li>
+        <li><strong>Cloud uploads.</strong> An account, a slow re-download, and often a squeezed version of your photo.</li>
+        <li><strong>Share apps.</strong> An app on both your phone and your computer, plus a discovery step that can fail.</li>
+      </ul>
+      <p>QuickDrop needs none of that: it's one code, one tap, and the originals land on your computer over your home Wi-Fi.</p>
+    </div>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <details><summary>Will my photos be compressed?</summary><p>No. Files keep their original quality and names. Nothing is re-encoded.</p></details>
+      <details><summary>Can I send many photos at once?</summary><p>Yes. Pick as many as you like in one go. QuickDrop shows live progress for every file.</p></details>
+      <details><summary>Where do they end up?</summary><p>In your computer's Downloads folder. Nothing is overwritten, and a file only appears once it's fully transferred.</p></details>
+      <details><summary>Does this need an internet connection?</summary><p>No, just a home Wi-Fi network. Your phone and computer talk directly to each other.</p></details>
+      <details><summary>Do I need an app on my phone?</summary><p>No. Your phone just opens a normal browser page when you scan the code.</p></details>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>&copy; 2026 QuickDrop</p>
+    <p><a href="../index.html">Home</a> &middot; <a href="../privacy.html">Privacy &amp; Terms</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

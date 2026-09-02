@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LocalSend Alternative | QuickDrop</title>
+<meta name="description" content="A simpler LocalSend alternative for getting files from a phone to a computer: no app on the phone, no device discovery to fail. Scan a code, pick files, done.">
+<link rel="canonical" href="https://altingruda.github.io/quickdrop/alternatives/localsend.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%232563eb'/%3E%3Cg fill='%23fff'%3E%3Crect x='8' y='8' width='8' height='8'/%3E%3Crect x='24' y='8' width='8' height='8'/%3E%3Crect x='8' y='24' width='8' height='8'/%3E%3Crect x='24' y='24' width='3' height='3'/%3E%3Crect x='28' y='28' width='3' height='3'/%3E%3Crect x='24' y='32' width='3' height='3'/%3E%3Crect x='16' y='16' width='2' height='2'/%3E%3Crect x='19' y='19' width='2' height='2'/%3E%3Crect x='22' y='16' width='2' height='2'/%3E%3Crect x='16' y='22' width='2' height='2'/%3E%3Crect x='14' y='14' width='2' height='2'/%3E%3Crect x='24' y='16' width='2' height='2'/%3E%3Crect x='16' y='30' width='2' height='2'/%3E%3Crect x='19' y='30' width='2' height='2'/%3E%3Crect x='14' y='26' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "QuickDrop",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Windows 10, Windows 11, macOS",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does the phone need an app installed to use QuickDrop?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. QuickDrop works in the browser your phone already has. You scan a QR code with the camera, a plain page opens, and you pick your files. No install, no account, nothing to update."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is QuickDrop different from LocalSend?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "LocalSend is installed on both devices and covers many directions (phone to phone, computer to computer, folders, clipboard). QuickDrop focuses on one job: getting files from a phone onto a computer with zero setup on the phone. There is no device discovery step to fail, and files only appear when they are fully transferred."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is QuickDrop free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. QuickDrop is free to download and use on Windows 10, Windows 11, and macOS."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do files go over the internet?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Files transfer directly from your phone to your computer over your local network. Nothing is uploaded to a cloud or a QuickDrop server."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why won't QuickDrop work on hotel or office Wi-Fi?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Many public and guest networks isolate devices from each other, so your phone and computer cannot reach each other. QuickDrop works best on a home Wi-Fi network. If a network blocks it, try a personal hotspot instead."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I move files from my computer to my phone?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. QuickDrop moves files one way: from your phone to your computer. That one direction is the whole focus, so it stays simple. For the opposite direction or phone-to-phone transfers, a tool like LocalSend is a better fit."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+  @font-face { font-family:"Geist"; src:url("../fonts/geist-latin-400.woff2") format("woff2"); font-weight:400; font-style:normal; font-display:swap; }
+  @font-face { font-family:"Geist"; src:url("../fonts/geist-latin-600.woff2") format("woff2"); font-weight:600; font-style:normal; font-display:swap; }
+  @font-face { font-family:"Geist"; src:url("../fonts/geist-latin-800.woff2") format("woff2"); font-weight:800; font-style:normal; font-display:swap; }
+  @font-face { font-family:"Geist Mono"; src:url("../fonts/geistmono-latin-500.woff2") format("woff2"); font-weight:500; font-style:normal; font-display:swap; }
+  :root {
+    --bg:#f9f9fa; --bg-2:#f2f2f4; --surface:#ffffff;
+    --ink:#18181b; --ink-soft:#3f3f46; --muted:#52525b;
+    --line:#e4e4e7; --line-soft:#eeeeef;
+    --accent:#2563eb; --accent-hover:#1d4ed8; --accent-tint:#eaf0fe;
+    --ok:#16a34a; --ok-tint:#e7f6ec;
+    --r-card:18px; --btn-bg:var(--accent); --btn-ink:#fff; --btn-hover:var(--accent-hover);
+    --shadow-1:0 1px 2px rgba(24,24,27,.05), 0 10px 28px -14px rgba(24,24,27,.14);
+  }
+  [data-theme="dark"]{
+    --bg:#0b0b0d; --bg-2:#111114; --surface:#151518;
+    --ink:#f4f4f5; --ink-soft:#d4d4d8; --muted:#a1a1aa;
+    --line:#26262b; --line-soft:#1d1d21;
+    --accent:#3b82f6; --accent-hover:#60a5fa; --accent-tint:#111f3d;
+    --ok:#22c55e; --ok-tint:#0f2318; --btn-bg:#fff; --btn-ink:#0b0b0d; --btn-hover:#d4d4d8;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;}
+  a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent-hover);}
+  .wrap{max-width:900px;margin:0 auto;padding:0 24px;}
+  .nav{position:sticky;top:0;z-index:40;background:var(--bg);background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--line-soft);}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px;}
+  .brand{display:inline-flex;align-items:center;gap:10px;font-weight:800;font-size:17px;letter-spacing:-.01em;color:var(--ink);}
+  .brand-mark{width:30px;height:30px;border-radius:8px;background:var(--accent);display:grid;place-items:center;}
+  .brand-mark svg{width:18px;height:18px;}
+  .nav-actions{display:flex;gap:12px;align-items:center;}
+  .btn{display:inline-flex;align-items:center;gap:8px;border-radius:12px;font-weight:600;font-size:14px;line-height:1;padding:13px 20px;border:1px solid transparent;cursor:pointer;transition:transform .18s,background-color .18s,box-shadow .18s;}
+  .btn-primary{background:var(--btn-bg);color:var(--btn-ink);box-shadow:0 10px 24px -12px rgba(37,99,235,.55);}
+  .btn-primary:hover{background:var(--btn-hover);transform:translateY(-1px);}
+  main{padding:64px 0 88px;}
+  .kicker{font-family:"Geist Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);}
+  h1{font-size:clamp(34px,5vw,48px);letter-spacing:-.03em;line-height:1.08;margin:16px 0 16px;}
+  .lede{font-size:18px;color:var(--muted);max-width:60ch;margin:0 0 8px;}
+  h2{font-size:26px;letter-spacing:-.02em;margin:60px 0 6px;}
+  h3{font-size:18px;margin:26px 0 8px;}
+  p,li{font-size:15.5px;color:var(--ink-soft);}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);box-shadow:var(--shadow-1);padding:34px 38px;margin-top:28px;}
+  table{width:100%;border-collapse:collapse;margin-top:18px;font-size:14.5px;}
+  th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line-soft);vertical-align:top;}
+  th{font-size:13px;font-family:"Geist Mono",ui-monospace,monospace;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);}
+  td:first-child{font-weight:600;color:var(--ink);white-space:nowrap;}
+  .yes{color:var(--ok);font-weight:600;}
+  .no{color:var(--muted);}
+  .win{color:var(--ok);font-weight:600;}
+  ul{padding-left:20px;} li{margin:7px 0;}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .box{background:var(--bg-2);border:1px solid var(--line-soft);border-radius:12px;padding:22px;}
+  .box h3{margin-top:0;}
+  .cta{margin-top:36px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .note{font-size:13px;color:var(--muted);}
+  .faq{margin-top:16px;}
+  .faq details{border:1px solid var(--line-soft);border-radius:12px;background:var(--surface);padding:18px 22px;margin-top:12px;}
+  .faq summary{cursor:pointer;font-weight:600;font-size:15.5px;color:var(--ink);}
+  .faq details p{margin:12px 0 0;font-size:14.5px;}
+  footer{border-top:1px solid var(--line-soft);padding:40px 0;}
+  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  footer p{margin:0;font-size:13px;color:var(--muted);}
+  @media(max-width:680px){.grid-2{grid-template-columns:1fr;}.card{padding:24px 20px;}table{font-size:13.5px;}td:first-child{white-space:normal;}}
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="Main">
+  <div class="wrap nav-inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="#fff" shape-rendering="crispEdges"><path d="M8 8h8v8H8zm16 0h8v8h-8zm-16 16h8v8H8zm16 0h3v3h-3zm4 4h3v3h-3zm-4 4h3v3h-3zM16 16h2v2h-2zm3 3h2v2h-2zm3-3h2v2h-2zm-6 6h2v2h-2zm-2-8h2v2h-2zm10 2h2v2h-2zm-8 12h2v2h-2zm3 0h2v2h-2zm-5-4h2v2h-2z"/></svg></span>
+      QuickDrop
+    </a>
+    <div class="nav-actions">
+      <a class="btn btn-primary" href="https://github.com/AltinGruda/quickdrop/releases/latest/download/QuickDrop-setup.exe">Download for Windows</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap">
+    <div class="kicker">LocalSend alternative</div>
+    <h1>A simpler way to move files from your phone to your computer.</h1>
+    <p class="lede">LocalSend is a capable tool. But for getting files off a phone onto a computer, a lot of people just want something simpler: no app to install on the phone, no device discovery to fail.</p>
+    <p class="lede">QuickDrop is that. You scan a code with your phone's camera, pick your files, and they land on your desktop. Over your home Wi-Fi, with no app, account, or cloud on the phone.</p>
+
+    <div class="cta">
+      <a class="btn btn-primary" href="https://github.com/AltinGruda/quickdrop/releases/latest/download/QuickDrop-setup.exe">Download for Windows</a>
+      <a class="btn btn-primary" href="https://github.com/AltinGruda/quickdrop/releases/latest/download/QuickDrop.dmg">Download for macOS</a>
+      <span class="note">Free. No account.</span>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-top:0">How QuickDrop compares to LocalSend</h2>
+      <p>An honest look at what each tool does. They overlap on one thing: moving files between local devices. But they're built for different moments.</p>
+      <table>
+        <thead><tr><th></th><th>QuickDrop</th><th>LocalSend</th></tr></thead>
+        <tbody>
+          <tr><td>App on the phone</td><td class="win">No, just the browser</td><td>Required on both devices</td></tr>
+          <tr><td>Direction</td><td>Phone &rarr; computer</td><td class="win">All directions</td></tr>
+          <tr><td>Setup</td><td class="win">Scan a code, pick files</td><td>Install, then discover devices</td></tr>
+          <tr><td>Files appear only when complete</td><td class="win">Yes, verified before saving</td><td>No</td></tr>
+          <tr><td>Resume interrupted transfers</td><td class="win">Yes</td><td>No</td></tr>
+          <tr><td>File size limits</td><td class="win">None</td><td class="win">None</td></tr>
+          <tr><td>Price</td><td class="win">Free</td><td class="win">Free</td></tr>
+          <tr><td>Open source</td><td class="win">Yes</td><td class="win">Yes</td></tr>
+        </tbody>
+      </table>
+      <p class="note" style="margin-top:14px">We designed QuickDrop around the single most common LocalSend pain: the phone that "never shows up" or a transfer that stalls on a big video. No discovery to fail means the two devices are almost never the reason a move doesn't work.</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="box">
+        <h3>Choose QuickDrop when</h3>
+        <ul>
+          <li>You want files off a phone onto one computer.</li>
+          <li>The person holding the phone shouldn't install anything.</li>
+          <li>Discovery has failed you (VPN, firewall, "devices can't find each other").</li>
+          <li>You want proof a big file finished before it's saved.</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3>Choose LocalSend when</h3>
+        <ul>
+          <li>You need phone to phone, or computer to computer.</li>
+          <li>You want folders, clipboard, or both directions.</li>
+          <li>Everyone involved is comfortable installing the app.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Why a no-app, one-way tool matters</h2>
+    <p>Most "send files to me" tools ask for an app on the phone, an account, or a cloud upload. That's a lot of friction, especially for someone who isn't technical. QuickDrop removes all of it:</p>
+    <ul>
+      <li><strong>Nothing on the phone.</strong> It's just a browser page. No install, no update, no permission to grant.</li>
+      <li><strong>Local only.</strong> Files go straight from phone to computer over your Wi-Fi. No cloud, no third party.</li>
+      <li><strong>Saved whole, only when complete.</strong> A file is checked before it appears, so you never get a half-finished download.</li>
+      <li><strong>Resumes, doesn't restart.</strong> Lock the phone or drop Wi-Fi mid-send and it picks up where it stopped.</li>
+    </ul>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <details><summary>Does the phone need an app installed to use QuickDrop?</summary><p>No. You scan a QR code with your phone's camera, a plain browser page opens, and you pick your files. Nothing to install, update, or allow.</p></details>
+      <details><summary>How is QuickDrop different from LocalSend?</summary><p>LocalSend runs installed on both devices and handles many directions. QuickDrop does one job: getting files from a phone onto a computer with zero setup on the phone. It does it without a device-discovery step that can fail.</p></details>
+      <details><summary>Is QuickDrop free?</summary><p>Yes, it's free on Windows 10, Windows 11, and macOS. No account needed.</p></details>
+      <details><summary>Do files go over the internet?</summary><p>No. Transfers happen directly between your phone and computer over your local network. Nothing is uploaded to a cloud or server.</p></details>
+      <details><summary>Why won't it work on hotel or office Wi-Fi?</summary><p>Many public and guest networks isolate devices from each other. QuickDrop works best on home Wi-Fi; if a network blocks it, try a personal hotspot.</p></details>
+      <details><summary>Can it move files from my computer to my phone?</summary><p>No. QuickDrop goes one way, phone to computer, by design. For the reverse or phone-to-phone, LocalSend is the better choice.</p></details>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>&copy; 2026 QuickDrop</p>
+    <p><a href="../index.html">Home</a> &middot; <a href="../privacy.html">Privacy &amp; Terms</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
