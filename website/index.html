@@ -485,6 +485,17 @@
   .story-card p { margin: 18px auto 0; font-size: 16.5px; color: var(--muted); max-width: 54ch; line-height: 1.6; }
   .story-card p + p { margin-top: 12px; }
 
+  /* ---------- promo video ---------- */
+  .promo-video { max-width: 960px; margin: 0 auto; }
+  .promo-video .frame {
+    position: relative; overflow: hidden; border-radius: var(--r-card);
+    border: 1px solid var(--line-soft); box-shadow: var(--shadow-2); background: #000;
+  }
+  .promo-video video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+  .promo-video .cap { margin-top: 16px; text-align: center; font-size: 14px; color: var(--muted); }
+  .promo-video .sec-head { margin-bottom: 32px; text-align: center; margin-left: auto; margin-right: auto; }
+  .promo-video .sec-head p { margin-left: auto; margin-right: auto; }
+
   /* ---------- capture ---------- */
   .capture {
     margin-top: 36px; padding-top: 30px; border-top: 1px solid var(--line-soft);
@@ -642,6 +653,24 @@
           <span id="ctlLabel">Try the demo</span>
         </button>
         <p class="stage-note">Interactive preview. Nothing leaves this page.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROMO VIDEO ============ -->
+  <section class="promo-video-sec" aria-label="QuickDrop in action">
+    <div class="wrap">
+      <div class="promo-video reveal">
+        <div class="sec-head">
+          <h2>See it in action.</h2>
+          <p>Everything stays on your own devices. No account, no cloud, no app on the phone.</p>
+        </div>
+        <div class="frame">
+          <video autoplay muted loop playsinline controls preload="metadata">
+            <source src="assets/quickdrop-promo.webm" type="video/webm">
+            <source src="assets/quickdrop-promo-h264.mp4" type="video/mp4">
+          </video>
+        </div>
       </div>
     </div>
   </section>
