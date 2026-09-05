@@ -658,6 +658,102 @@
   .toggle:checked { background: var(--teal); }
   .toggle:checked::after { transform: translateX(16px); }
 
+  /* First-run onboarding -------------------------------------------------- */
+
+  .onboard {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .onboard[hidden] { display: none !important; }
+  .onboard-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(38, 34, 25, 0.4);
+    backdrop-filter: blur(3px);
+    animation: fadeIn 0.18s ease both;
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .onboard-backdrop { backdrop-filter: none; }
+  }
+  .onboard-card {
+    position: relative;
+    width: 100%;
+    max-width: 430px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(38, 34, 25, 0.3);
+    padding: 22px 26px 18px;
+    animation: sheetRise 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .onboard-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .onboard-count {
+    font-size: 0.7rem;
+    font-weight: 650;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .onboard-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .onboard-bar > i {
+    display: block;
+    height: 100%;
+    width: 100%;
+    border-radius: 4px;
+    background: var(--teal);
+    transform-origin: left;
+    transform: scaleX(0.33);
+    transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .onboard-views { margin-top: 16px; }
+  .onboard-art {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    margin-bottom: 14px;
+    color: var(--teal);
+  }
+  .onboard-views h2 {
+    margin: 0 0 6px;
+    font-size: 1.22rem;
+    font-weight: 680;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+  .onboard-views p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--muted);
+    text-wrap: pretty;
+  }
+  .onboard-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .onboard-foot .spacer { flex: 1; }
+
   /* Bottom dock ---------------------------------------------------------- */
 
   .dock {
@@ -853,6 +949,77 @@
     </div>
   </div>
 
+  <div class="onboard" id="onboardWrap" hidden>
+    <div class="onboard-backdrop"></div>
+    <div class="onboard-card" role="dialog" aria-modal="true" aria-labelledby="obTitle1" aria-describedby="obBody">
+      <div class="onboard-top">
+        <span class="onboard-count" id="obCount">Step 1 of 3</span>
+        <div class="onboard-bar"><i id="obBar"></i></div>
+      </div>
+
+      <div class="onboard-views" id="obBody">
+        <div class="onboard-view" data-view="0">
+          <div class="onboard-art" aria-hidden="true">
+            <svg width="120" height="90" viewBox="0 0 104 78" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="26" width="22" height="36" rx="5"/>
+              <path d="M10 31h10"></path>
+              <path d="M15 56h4"></path>
+              <path d="M30 44a15 14 0 0 1 30 0"></path>
+              <path d="M35 52a10 9 0 0 1 20 0"></path>
+              <circle cx="45" cy="60" r="2.4"></circle>
+              <rect x="70" y="30" width="30" height="22" rx="4"/>
+              <path d="M85 52v10"></path>
+              <path d="M74 62h22"></path>
+            </svg>
+          </div>
+          <h2 id="obTitle1">Put both on the same Wi-Fi</h2>
+          <p>Your phone and this computer need to share a network. Files travel straight between them, never over the internet.</p>
+        </div>
+
+        <div class="onboard-view" data-view="1" hidden>
+          <div class="onboard-art" aria-hidden="true">
+            <svg width="120" height="90" viewBox="0 0 104 78" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 28V14a4 4 0 0 1 4-4h16"></path>
+              <path d="M78 10h16a4 4 0 0 1 4 4v14"></path>
+              <path d="M98 50v14a4 4 0 0 1-4 4H78"></path>
+              <path d="M26 74H10a4 4 0 0 1-4-4V56"></path>
+              <rect x="34" y="22" width="36" height="36" rx="4" fill="currentColor" stroke="none"/>
+              <rect x="40" y="28" width="7" height="7" fill="#fffdf8"/>
+              <rect x="57" y="28" width="7" height="7" fill="#fffdf8"/>
+              <rect x="40" y="45" width="7" height="7" fill="#fffdf8"/>
+              <rect x="51" y="36" width="4" height="4" fill="#fffdf8"/>
+            </svg>
+          </div>
+          <h2 id="obTitle2">Scan the code with your camera</h2>
+          <p>Open your phone&rsquo;s camera app and point it at the code. No app to install, the sending page opens on your phone.</p>
+        </div>
+
+        <div class="onboard-view" data-view="2" hidden>
+          <div class="onboard-art" aria-hidden="true">
+            <svg width="120" height="90" viewBox="0 0 104 78" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="6" y="14" width="30" height="44" rx="5"/>
+              <path d="M14 32h14"></path>
+              <path d="M14 40h14"></path>
+              <path d="M14 48h8"></path>
+              <path d="M68 16v26"></path>
+              <path d="M58 33l10 9 10-9"></path>
+              <path d="M49 52v2a6 6 0 0 0 6 6h24a6 6 0 0 0 6-6v-2"></path>
+            </svg>
+          </div>
+          <h2 id="obTitle3">Pick files on your phone</h2>
+          <p>Choose the photos, videos, or anything else you want, and send. They appear here, then land in your folder.</p>
+        </div>
+      </div>
+
+      <div class="onboard-foot">
+        <button type="button" class="btn btn-text" id="obSkip">Skip</button>
+        <div class="spacer"></div>
+        <button type="button" class="btn btn-ghost" id="obBack" hidden>Back</button>
+        <button type="button" class="btn btn-primary" id="obNext">Next</button>
+      </div>
+    </div>
+  </div>
+
 <script>
   var rows = {};             // uploadId -> row object
   var statuses = {};         // uploadId -> current status
@@ -862,7 +1029,7 @@
   var doneBox = document.getElementById('done');
   var errBox = document.getElementById('err');
   var warnBox = document.getElementById('warnBox');
-  var settings = { sound: true, notifications: true, launchAtStartup: false, closeToTray: true };
+  var settings = { sound: true, notifications: true, launchAtStartup: false, closeToTray: true, onboardingDone: true };
 
   function playSound(name){
     if (!settings.sound) return;
@@ -911,6 +1078,7 @@
         settings.notifications = !!prefs.notifications;
         settings.launchAtStartup = !!prefs.launchAtStartup;
         settings.closeToTray = !!prefs.closeToTray;
+        settings.onboardingDone = !!prefs.onboardingDone;
         applySettingsToUI();
       }
       var info = await window.go.main.App.SessionInfo();
@@ -921,6 +1089,7 @@
       renderSession(info);
       var qr = await window.go.main.App.QRDataURL();
       if (qr) document.getElementById('qr').src = qr;
+      startOnboarding();
     } catch (e) {
       showErr('Could not load: ' + (e && e.message ? e.message : e));
     }
@@ -1021,6 +1190,68 @@
   document.getElementById('setSound').addEventListener('change', function(e){ setSetting('sound', e.target.checked); });
   document.getElementById('setTray').addEventListener('change', function(e){ setSetting('closeToTray', e.target.checked); });
 
+  // ---- First-run onboarding ----
+  var onboardWrap = document.getElementById('onboardWrap');
+  var onboardCard = onboardWrap.querySelector('.onboard-card');
+  var obViews = Array.prototype.slice.call(onboardWrap.querySelectorAll('.onboard-view'));
+  var obStep = 0;
+  var obNext = document.getElementById('obNext');
+  var obBack = document.getElementById('obBack');
+  var obCount = document.getElementById('obCount');
+  var obBar = document.getElementById('obBar');
+  var obPrevFocus = null;
+
+  function renderOnboarding(){
+    obViews.forEach(function(v, i){ v.hidden = i !== obStep; });
+    obBack.hidden = obStep === 0;
+    obNext.textContent = obStep === 2 ? 'Got it' : 'Next';
+    obCount.textContent = 'Step ' + (obStep + 1) + ' of 3';
+    obBar.style.transform = 'scaleX(' + ((obStep + 1) / 3) + ')';
+    onboardCard.setAttribute('aria-labelledby', 'obTitle' + (obStep + 1));
+    obNext.focus();
+  }
+  function startOnboarding(){
+    if (settings.onboardingDone) return;
+    obStep = 0;
+    obPrevFocus = document.activeElement;
+    renderOnboarding();
+    onboardWrap.hidden = false;
+    obNext.focus();
+  }
+  function finishOnboarding(){
+    if (onboardWrap.hidden) return;
+    onboardWrap.hidden = true;
+    if (!settings.onboardingDone) setSetting('onboardingDone', true);
+    if (obPrevFocus && obPrevFocus.focus) obPrevFocus.focus();
+  }
+  obNext.addEventListener('click', function(){
+    if (obStep < 2){ obStep++; renderOnboarding(); }
+    else finishOnboarding();
+  });
+  obBack.addEventListener('click', function(){
+    if (obStep > 0){ obStep--; renderOnboarding(); }
+  });
+  document.getElementById('obSkip').addEventListener('click', finishOnboarding);
+  onboardWrap.addEventListener('click', function(e){
+    if (e.target === onboardWrap || e.target.classList.contains('onboard-backdrop')) finishOnboarding();
+  });
+  // Keep Tab inside the open card and let Escape close it.
+  document.addEventListener('keydown', function(e){
+    if (onboardWrap.hidden) return;
+    if (e.key === 'Escape'){ finishOnboarding(); return; }
+    if (e.key === 'Tab'){
+      var focusables = onboardCard.querySelectorAll('button:not([hidden])');
+      if (focusables.length === 0) return;
+      var first = focusables[0];
+      var last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first){
+        e.preventDefault(); last.focus();
+      } else if (!e.shiftKey && document.activeElement === last){
+        e.preventDefault(); first.focus();
+      }
+    }
+  });
+
   // Live rows, driven entirely by server events.
   window.runtime.EventsOn('upload-progress', function(d){
     if (!d || !d.uploadId) return;
@@ -1058,6 +1289,8 @@
       status.textContent = label;
       document.getElementById('openFolder').disabled = false;
       queueSuccessSound();
+      // First file is the goal — drop the onboarding for good.
+      finishOnboarding();
       return;
     }
     if (d.type === 'progress'){

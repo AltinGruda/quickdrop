@@ -35,6 +35,12 @@ type App struct {
 	notifPending   []string
 	notifTimer     *time.Timer
 	forceQuit      bool
+
+	// firstRun is true when this launch started with no config file at all,
+	// i.e. a genuine fresh install. The GUI uses it to decide whether to show
+	// the one-time first-run onboarding without nagging existing users whose
+	// older config files predate the onboardingDone flag.
+	firstRun bool
 }
 
 // appConfig is the persisted settings file (destination folder plus feature
@@ -45,15 +51,17 @@ type appConfig struct {
 	Notifications   bool   `json:"notifications"`
 	Sound           bool   `json:"sound"`
 	CloseToTray     bool   `json:"closeToTray"`
+	OnboardingDone  bool   `json:"onboardingDone"`
 }
 
 // appConfigDefaults returns the first-run feature-toggle values. Used when no
 // config file exists yet (fresh install).
 func appConfigDefaults() appConfig {
 	return appConfig{
-		Notifications: true,
-		Sound:         true,
-		CloseToTray:   true,
+		Notifications:   true,
+		Sound:           true,
+		CloseToTray:     true,
+		OnboardingDone:  true,
 	}
 }
 
@@ -85,6 +93,7 @@ func loadAppConfig() appConfig {
 		Notifications   *bool   `json:"notifications"`
 		Sound           *bool   `json:"sound"`
 		CloseToTray     *bool   `json:"closeToTray"`
+		OnboardingDone  *bool   `json:"onboardingDone"`
 	}
 	if err := json.Unmarshal(b, &raw); err != nil {
 		return cfg
@@ -104,6 +113,9 @@ func loadAppConfig() appConfig {
 	if raw.CloseToTray != nil {
 		cfg.CloseToTray = *raw.CloseToTray
 	}
+	if raw.OnboardingDone != nil {
+		cfg.OnboardingDone = *raw.OnboardingDone
+	}
 	return cfg
 }
 
@@ -121,7 +133,15 @@ func saveAppConfig(cfg appConfig) {
 
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+	// A missing config file means a genuine first run. Remember that for the
+	// GUI's one-time onboarding and make sure onboarding isn't marked done yet.
+	_, statErr := os.Stat(configPath())
+	a.firstRun = os.IsNotExist(statErr)
 	stored := loadAppConfig()
+	onboardingDone := stored.OnboardingDone
+	if a.firstRun {
+		onboardingDone = false
+	}
 	a.destDir = stored.DestDir
 	if a.destDir == "" {
 		a.destDir = server.DefaultDestDir()
@@ -131,6 +151,7 @@ func (a *App) startup(ctx context.Context) {
 		"notifications":   stored.Notifications,
 		"sound":           stored.Sound,
 		"closeToTray":     stored.CloseToTray,
+		"onboardingDone":  onboardingDone,
 	}
 	// Reconcile the persisted preference with the OS-level autostart
 	// registration, so the two never drift apart after an upgrade or an
@@ -195,6 +216,12 @@ func (a *App) onEvent(ev server.Event) {
 		a.recordReceived(ev)
 		if a.prefEnabled("notifications") {
 			a.scheduleNotify(ev)
+		}
+		// The first file landing is the "aha moment" — it means onboarding has
+		// served its purpose, so mark it done permanently even if the user
+		// never clicked through the overlay.
+		if !a.prefEnabled("onboardingDone") {
+			a.SetSetting("onboardingDone", true)
 		}
 	case server.EvFileError:
 		if ev.Message != "" && a.prefEnabled("notifications") {
@@ -378,6 +405,7 @@ func (a *App) persistConfig() {
 		Notifications:   a.prefs["notifications"],
 		Sound:           a.prefs["sound"],
 		CloseToTray:     a.prefs["closeToTray"],
+		OnboardingDone:  a.prefs["onboardingDone"],
 	}
 	a.mu.Unlock()
 	saveAppConfig(cfg)
@@ -395,10 +423,11 @@ func (a *App) Settings() map[string]any {
 }
 
 // SetSetting flips a single named preference (launchAtStartup, notifications,
-// sound, closeToTray), persists it, and returns the updated settings snapshot.
+// sound, closeToTray, onboardingDone), persists it, and returns the updated
+// settings snapshot.
 func (a *App) SetSetting(key string, value bool) map[string]any {
 	switch key {
-	case "launchAtStartup", "notifications", "sound", "closeToTray":
+	case "launchAtStartup", "notifications", "sound", "closeToTray", "onboardingDone":
 	default:
 		return map[string]any{"error": "Unknown setting: " + key}
 	}
