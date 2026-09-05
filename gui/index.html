@@ -115,6 +115,7 @@
     padding: 18px 22px 10px;
   }
   .stage > * { flex: none; width: 100%; max-width: 560px; }
+  .hidden { display: none !important; }
 
   .banner {
     display: none;
@@ -227,7 +228,7 @@
     font-weight: 650;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--faint);
+    color: var(--muted);
   }
   .url {
     font-size: 0.8rem;
@@ -312,7 +313,7 @@
     font-weight: 650;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--faint);
+    color: var(--muted);
     white-space: nowrap;
   }
   .files-head::after {
@@ -431,6 +432,232 @@
   }
   .row.stale .status { color: var(--warn); }
 
+  /* History section ------------------------------------------------------ */
+
+  .history-wrap {
+    width: 100%;
+    max-width: 560px;
+    margin: 10px auto 0;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow-sm);
+    padding: 12px 16px 12px;
+  }
+  .history-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+    color: var(--ink);
+  }
+  .history-head h2 {
+    margin: 0;
+    font-size: 0.78rem;
+    font-weight: 650;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .history-head .count {
+    font-size: 0.76rem;
+    color: var(--muted);
+  }
+  .history-head::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+  .history-head .chev {
+    color: var(--faint);
+    transition: transform 0.2s ease;
+    flex: none;
+  }
+  .history-wrap.open .history-head .chev { transform: rotate(180deg); }
+  .history-body {
+    display: none;
+    margin-top: 10px;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 240px;
+    overflow-y: auto;
+  }
+  .history-wrap.open .history-body { display: flex; }
+  #histEmpty {
+    color: var(--muted);
+    font-size: 0.85rem;
+    padding: 10px 4px;
+    text-align: center;
+  }
+  .hrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 11px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+  .hrow .hname {
+    flex: 1;
+    min-width: 0;
+    font-weight: 600;
+    font-size: 0.9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .hrow .hmeta {
+    flex: none;
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .hrow .hactions { display: flex; gap: 6px; flex: none; }
+  .mini-btn {
+    border: 1px solid var(--line-2);
+    background: var(--card);
+    color: var(--teal-deep);
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+  .mini-btn:hover { border-color: var(--teal); background: var(--teal-soft); }
+  .clear-hist {
+    align-self: flex-start;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.75rem;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 4px 0;
+  }
+  .clear-hist:hover { color: var(--err); }
+
+  /* Settings sheet ------------------------------------------------------- */
+
+  .settings {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .settings[hidden] { display: none !important; }
+  .settings-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(38, 34, 25, 0.32);
+    backdrop-filter: blur(2px);
+    animation: fadeIn 0.18s ease both;
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .settings-backdrop { backdrop-filter: none; }
+  }
+  .settings-card {
+    position: relative;
+    width: 100%;
+    max-width: 430px;
+    max-height: calc(100% - 24px);
+    overflow-y: auto;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(38, 34, 25, 0.26);
+    padding: 20px 22px 18px;
+    animation: sheetRise 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes sheetRise { from { opacity: 0; transform: translateY(10px) scale(0.98); } to { opacity: 1; transform: none; } }
+  .settings-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .settings-head h2 {
+    margin: 0;
+    font-size: 1.12rem;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .settings-close {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .settings-close:hover { color: var(--ink); background: var(--paper-2); }
+  .settings-group { margin-top: 14px; }
+  .settings-group-title {
+    margin: 0 0 2px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 2px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--line);
+  }
+  .settings-group .toggle-row:last-of-type { border-bottom: none; }
+  .toggle-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .toggle-copy b { font-size: 0.92rem; font-weight: 600; }
+  .toggle-copy small { color: var(--muted); font-size: 0.78rem; line-height: 1.4; }
+  .toggle {
+    appearance: none;
+    flex: none;
+    width: 40px;
+    height: 24px;
+    border-radius: 999px;
+    background: var(--line-2);
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  .toggle::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+    transition: transform 0.2s ease;
+  }
+  .toggle:checked { background: var(--teal); }
+  .toggle:checked::after { transform: translateX(16px); }
+
   /* Bottom dock ---------------------------------------------------------- */
 
   .dock {
@@ -496,7 +723,9 @@
     }
     #err { grid-column: 1 / -1; margin-bottom: 4px; }
     #intro { grid-column: 1; align-self: center; max-height: 100%; overflow-y: auto; min-width: 0; }
-    .files { grid-column: 2; margin: 0; max-width: none; align-self: stretch; }
+    .right-col { grid-column: 2; align-self: stretch; min-height: 0; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
+    .files { grid-column: auto; margin: 0; max-width: none; align-self: auto; }
+    .history-wrap { grid-column: auto; margin: 0; max-width: none; }
     .intro-inner { max-width: 420px; }
     #list { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
   }
@@ -548,29 +777,81 @@
       </div>
     </section>
 
-    <section class="files">
-      <div class="files-head"><h2>Files coming in</h2></div>
-      <div id="empty">
-        <svg width="46" height="46" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M24 9v19m0 0l-7-7m7 7l7-7"/>
-          <path d="M11 30v3a5 5 0 0 0 5 5h16a5 5 0 0 0 5-5v-3"/>
-          <path d="M24 30v3"/>
-        </svg>
-        <span>Waiting for files.<br><b>Point your phone at the code</b>, then choose files to send on it.</span>
-      </div>
-      <div id="done">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>
-        All done — you can close QuickDrop.
-      </div>
-      <div id="list"></div>
-    </section>
+    <div class="right-col">
+      <section class="files">
+        <div class="files-head"><h2>Files coming in</h2></div>
+        <div id="empty">
+          <svg width="46" height="46" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M24 9v19m0 0l-7-7m7 7l7-7"/>
+            <path d="M11 30v3a5 5 0 0 0 5 5h16a5 5 0 0 0 5-5v-3"/>
+            <path d="M24 30v3"/>
+          </svg>
+          <span>Waiting for files.<br><b>Point your phone at the code</b>, then choose files to send on it.</span>
+        </div>
+        <div id="done">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>
+          All done — you can close QuickDrop.
+        </div>
+        <div id="list"></div>
+      </section>
+
+      <section class="history-wrap" id="historyWrap">
+        <div class="history-head" id="historyHead">
+          <h2>Received earlier</h2>
+          <span class="count" id="histCount"></span>
+          <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="history-body" id="historyBody">
+          <div id="histEmpty">No files received yet — this list will remember files even after you start over.</div>
+        </div>
+        <button class="clear-hist" id="clearHist">Clear received files</button>
+      </section>
+    </div>
+
   </main>
 
   <footer class="dock">
     <button class="btn btn-primary" id="openFolder" disabled>Open folder</button>
     <button class="btn btn-ghost" id="newCode">Done — start over</button>
     <button class="btn btn-text" id="changeFolder">Change folder</button>
+    <button class="btn btn-text" id="settingsBtn">Settings</button>
   </footer>
+
+  <div class="settings" id="settingsWrap" hidden>
+    <div class="settings-backdrop"></div>
+    <div class="settings-card" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="settings-head">
+        <h2 id="settingsTitle">Settings</h2>
+        <button type="button" class="settings-close" id="settingsClose" aria-label="Close settings">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+
+      <div class="settings-group">
+        <h3 class="settings-group-title">App behavior</h3>
+        <label class="toggle-row">
+          <span class="toggle-copy"><b>Open QuickDrop at login</b><small>Starts quietly when you sign in, ready for a new code.</small></span>
+          <input type="checkbox" id="setLaunch" class="toggle">
+        </label>
+        <label class="toggle-row">
+          <span class="toggle-copy"><b>Keep running in the tray</b><small>Closing the window hides it instead of quitting.</small></span>
+          <input type="checkbox" id="setTray" class="toggle">
+        </label>
+      </div>
+
+      <div class="settings-group">
+        <h3 class="settings-group-title">When files land</h3>
+        <label class="toggle-row">
+          <span class="toggle-copy"><b>Notifications</b><small>Alert when files arrive — batched into one per burst.</small></span>
+          <input type="checkbox" id="setNotif" class="toggle">
+        </label>
+        <label class="toggle-row">
+          <span class="toggle-copy"><b>Completion sound</b><small>Play a short chime when transfers finish.</small></span>
+          <input type="checkbox" id="setSound" class="toggle">
+        </label>
+      </div>
+    </div>
+  </div>
 
 <script>
   var rows = {};             // uploadId -> row object
@@ -581,6 +862,40 @@
   var doneBox = document.getElementById('done');
   var errBox = document.getElementById('err');
   var warnBox = document.getElementById('warnBox');
+  var settings = { sound: true, notifications: true, launchAtStartup: false, closeToTray: true };
+
+  function playSound(name){
+    if (!settings.sound) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var a = document.createElement('audio');
+    a.src = 'assets/' + name;
+    a.volume = 0.6;
+    a.play().catch(function(){});
+  }
+  var audioReady = false;
+  function unlockAudio(){
+    if (audioReady) return;
+    audioReady = true;
+    // prime both sounds so the browser allows playback on first transfer
+    ['success.wav','error.wav'].forEach(function(n){
+      var a = document.createElement('audio');
+      a.src = 'assets/' + n;
+      a.volume = 0.6;
+    });
+  }
+  document.addEventListener('click', unlockAudio, { once: true });
+
+  // Several files finishing at once would otherwise stack chimes. Coalesce
+  // them: the first done schedules one chime, and any done arriving within the
+  // window resets it, so a burst still rings exactly once.
+  var successSoundTimer = null;
+  function queueSuccessSound(){
+    if (successSoundTimer) clearTimeout(successSoundTimer);
+    successSoundTimer = setTimeout(function(){
+      successSoundTimer = null;
+      playSound('success.wav');
+    }, 400);
+  }
 
   function showErr(msg){
     errBox.style.display = 'block';
@@ -590,6 +905,14 @@
 
   async function init(){
     try {
+      var prefs = await window.go.main.App.Settings();
+      if (prefs && !prefs.error){
+        settings.sound = !!prefs.sound;
+        settings.notifications = !!prefs.notifications;
+        settings.launchAtStartup = !!prefs.launchAtStartup;
+        settings.closeToTray = !!prefs.closeToTray;
+        applySettingsToUI();
+      }
       var info = await window.go.main.App.SessionInfo();
       if (info.state === 'error' || info.error){
         showErr(info.error || 'QuickDrop couldn\u2019t start. Close it and open it again.');
@@ -665,14 +988,45 @@
     });
   });
 
+  // ---- Settings panel ----
+  function applySettingsToUI(){
+    document.getElementById('setLaunch').checked = !!settings.launchAtStartup;
+    document.getElementById('setNotif').checked = !!settings.notifications;
+    document.getElementById('setSound').checked = !!settings.sound;
+    document.getElementById('setTray').checked = !!settings.closeToTray;
+  }
+  function setSetting(key, val){
+    settings[key] = val;
+    window.go.main.App.SetSetting(key, val);
+  }
+  var settingsWrap = document.getElementById('settingsWrap');
+  function openSettings(){
+    settingsWrap.hidden = false;
+    document.getElementById('setLaunch').focus();
+  }
+  function closeSettings(){
+    settingsWrap.hidden = true;
+    document.getElementById('settingsBtn').focus();
+  }
+  document.getElementById('settingsBtn').addEventListener('click', openSettings);
+  document.getElementById('settingsClose').addEventListener('click', closeSettings);
+  settingsWrap.addEventListener('click', function(e){
+    if (e.target === settingsWrap || e.target.classList.contains('settings-backdrop')) closeSettings();
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && !settingsWrap.hidden) closeSettings();
+  });
+  document.getElementById('setLaunch').addEventListener('change', function(e){ setSetting('launchAtStartup', e.target.checked); });
+  document.getElementById('setNotif').addEventListener('change', function(e){ setSetting('notifications', e.target.checked); });
+  document.getElementById('setSound').addEventListener('change', function(e){ setSetting('sound', e.target.checked); });
+  document.getElementById('setTray').addEventListener('change', function(e){ setSetting('closeToTray', e.target.checked); });
+
   // Live rows, driven entirely by server events.
   window.runtime.EventsOn('upload-progress', function(d){
     if (!d || !d.uploadId) return;
     var row = rows[d.uploadId];
     if (!row){
-      // First progress for this file: collapse the QR into a compact banner
-      // and let the file list take over the window.
-      hideIntro();
+      // First progress for this file: let the file list take over the left column.
       empty.style.display = 'none';
       doneBox.style.display = 'none';
       row = document.createElement('div');
@@ -691,6 +1045,7 @@
       row.classList.add('error');
       bar.style.width = '100%';
       status.textContent = d.message || 'The transfer didn\u2019t finish.';
+      playSound('error.wav');
       return;
     }
     if (d.type === 'file-done'){
@@ -702,6 +1057,7 @@
       if (d.finalName && d.finalName !== d.filename) label += ' (saved as ' + d.finalName + ')';
       status.textContent = label;
       document.getElementById('openFolder').disabled = false;
+      queueSuccessSound();
       return;
     }
     if (d.type === 'progress'){
@@ -750,6 +1106,76 @@
     if (n >= 1024) return Math.round(n/1024) + ' KB';
     return n + ' B';
   }
+
+  // ---- Received-earlier history ----
+  function formatWhen(ts){
+    var d = new Date(ts * 1000);
+    var now = new Date();
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var that = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    var days = Math.round((today - that) / 86400000);
+    if (days === 0) return d.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+    if (days === 1) return 'Yesterday';
+    return d.toLocaleDateString([], {month: 'short', day: 'numeric'});
+  }
+  function refreshHistory(){
+    window.go.main.App.History().then(function(rows){
+      var body = document.getElementById('historyBody');
+      var count = document.getElementById('histCount');
+      var empty = document.getElementById('histEmpty');
+      body.querySelectorAll('.hrow').forEach(function(el){ el.remove(); });
+      if (!rows || rows.length === 0){
+        count.textContent = '';
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+      count.textContent = rows.length;
+      rows.forEach(function(r){
+        var el = document.createElement('div');
+        el.className = 'hrow';
+        var name = r.finalName || r.name || 'File';
+        var openBtn = document.createElement('button');
+        openBtn.className = 'mini-btn';
+        openBtn.textContent = 'Open';
+        openBtn.title = 'Open this file';
+        openBtn.addEventListener('click', function(){ window.go.main.App.OpenFile(r.path); });
+        var revealBtn = document.createElement('button');
+        revealBtn.className = 'mini-btn';
+        revealBtn.textContent = 'Show in folder';
+        revealBtn.title = 'Reveal the file in your file manager';
+        revealBtn.addEventListener('click', function(){ window.go.main.App.RevealPath(r.path); });
+        var meta = document.createElement('span');
+        meta.className = 'hmeta';
+        meta.textContent = humanSize(r.size) + ' \u00b7 ' + formatWhen(r.at);
+        var nameEl = document.createElement('span');
+        nameEl.className = 'hname';
+        nameEl.textContent = name;
+        nameEl.title = r.shown || name;
+        nameEl.addEventListener('dblclick', function(){ window.go.main.App.OpenFile(r.path); });
+        var actions = document.createElement('div');
+        actions.className = 'hactions';
+        actions.appendChild(openBtn);
+        actions.appendChild(revealBtn);
+        el.appendChild(nameEl);
+        el.appendChild(meta);
+        el.appendChild(actions);
+        body.appendChild(el);
+      });
+    });
+  }
+  document.getElementById('historyHead').addEventListener('click', function(){
+    document.getElementById('historyWrap').classList.toggle('open');
+    if (document.getElementById('historyWrap').classList.contains('open')) refreshHistory();
+  });
+  document.getElementById('clearHist').addEventListener('click', function(){
+    window.go.main.App.ClearHistory().then(function(){
+      refreshHistory();
+    });
+  });
+  window.runtime.EventsOn('history-update', function(){
+    refreshHistory();
+  });
 
   window.addEventListener('DOMContentLoaded', init);
 </script>

@@ -5,12 +5,14 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
 	"sync"
+	"time"
 
 	"quickdrop/server"
 
@@ -24,16 +26,39 @@ type App struct {
 	mu      sync.Mutex
 	srv     *server.Server
 	destDir string
+	prefs   map[string]bool
+
+	history        *historyStore
+	notifMu        sync.Mutex
+	notifInitDone  bool
+	notifAuthAsked bool
+	notifPending   []string
+	notifTimer     *time.Timer
+	forceQuit      bool
 }
 
-// appConfig is the small persisted settings file (destination folder). It
-// lives in the user's config directory.
+// appConfig is the persisted settings file (destination folder plus feature
+// toggles). It lives in the user's config directory.
 type appConfig struct {
-	DestDir string `json:"destDir"`
+	DestDir         string `json:"destDir"`
+	LaunchAtStartup bool   `json:"launchAtStartup"`
+	Notifications   bool   `json:"notifications"`
+	Sound           bool   `json:"sound"`
+	CloseToTray     bool   `json:"closeToTray"`
+}
+
+// appConfigDefaults returns the first-run feature-toggle values. Used when no
+// config file exists yet (fresh install).
+func appConfigDefaults() appConfig {
+	return appConfig{
+		Notifications: true,
+		Sound:         true,
+		CloseToTray:   true,
+	}
 }
 
 func NewApp() *App {
-	return &App{}
+	return &App{history: newHistoryStore()}
 }
 
 // configPath returns the user config file, e.g.
@@ -47,12 +72,38 @@ func configPath() string {
 }
 
 func loadAppConfig() appConfig {
-	var cfg appConfig
+	cfg := appConfigDefaults()
 	b, err := os.ReadFile(configPath())
 	if err != nil {
 		return cfg
 	}
-	_ = json.Unmarshal(b, &cfg)
+	// Unmarshal into a pointing version so we can tell a boolean that was
+	// explicitly written as false apart from one that was never saved.
+	var raw struct {
+		DestDir         *string `json:"destDir"`
+		LaunchAtStartup *bool   `json:"launchAtStartup"`
+		Notifications   *bool   `json:"notifications"`
+		Sound           *bool   `json:"sound"`
+		CloseToTray     *bool   `json:"closeToTray"`
+	}
+	if err := json.Unmarshal(b, &raw); err != nil {
+		return cfg
+	}
+	if raw.DestDir != nil {
+		cfg.DestDir = *raw.DestDir
+	}
+	if raw.LaunchAtStartup != nil {
+		cfg.LaunchAtStartup = *raw.LaunchAtStartup
+	}
+	if raw.Notifications != nil {
+		cfg.Notifications = *raw.Notifications
+	}
+	if raw.Sound != nil {
+		cfg.Sound = *raw.Sound
+	}
+	if raw.CloseToTray != nil {
+		cfg.CloseToTray = *raw.CloseToTray
+	}
 	return cfg
 }
 
@@ -75,8 +126,22 @@ func (a *App) startup(ctx context.Context) {
 	if a.destDir == "" {
 		a.destDir = server.DefaultDestDir()
 	}
+	a.prefs = map[string]bool{
+		"launchAtStartup": stored.LaunchAtStartup,
+		"notifications":   stored.Notifications,
+		"sound":           stored.Sound,
+		"closeToTray":     stored.CloseToTray,
+	}
+	// Reconcile the persisted preference with the OS-level autostart
+	// registration, so the two never drift apart after an upgrade or an
+	// external change.
+	reconcileLaunchAtStartup(stored.LaunchAtStartup)
 	if err := a.startServer(); err != nil {
 		wailsruntime.EventsEmit(ctx, "startup-error", plainErr(err))
+	}
+	// Ask for notification permission once if the feature is enabled.
+	if a.prefEnabled("notifications") {
+		a.requestNotificationPermission()
 	}
 }
 
@@ -121,8 +186,22 @@ func (a *App) startServer() error {
 	return nil
 }
 
-// onEvent bridges server-side events into GUI events.
+// onEvent bridges server-side events into GUI events, and drives the OS
+// notifications + received-files history. It runs on server goroutines, so it
+// must not block or panic.
 func (a *App) onEvent(ev server.Event) {
+	switch ev.Type {
+	case server.EvFileDone:
+		a.recordReceived(ev)
+		if a.prefEnabled("notifications") {
+			a.scheduleNotify(ev)
+		}
+	case server.EvFileError:
+		if ev.Message != "" && a.prefEnabled("notifications") {
+			a.TrayNotify("QuickDrop transfer", ev.Message)
+		}
+	}
+
 	if a.ctx == nil {
 		return
 	}
@@ -141,6 +220,101 @@ func (a *App) onEvent(ev server.Event) {
 		"message":  ev.Message,
 	}
 	wailsruntime.EventsEmit(a.ctx, "upload-progress", payload)
+}
+
+// recordReceived persists a successfully received file into the history store.
+func (a *App) recordReceived(ev server.Event) {
+	dir := a.srvDestDir()
+	if dir == "" {
+		return
+	}
+	if ev.FinalName == "" {
+		return
+	}
+	a.history.add(HistoryEntry{
+		Name:      ev.Filename,
+		Size:      ev.Bytes,
+		FinalName: ev.FinalName,
+		Path:      filepath.Join(dir, ev.FinalName),
+	})
+	if a.ctx != nil {
+		wailsruntime.EventsEmit(a.ctx, "history-update")
+	}
+}
+
+// srvDestDir returns the current session's destination folder (thread-safe).
+func (a *App) srvDestDir() string {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	if a.srv == nil {
+		return a.destDir
+	}
+	return a.srv.DestDir()
+}
+
+func (a *App) prefEnabled(key string) bool {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	return a.prefs[key]
+}
+
+// notifBatchDelay is how long completed transfers are collected before a
+// single combined notification goes out. It turns a burst of N files landing
+// at once into one notice instead of an N-deep toast stack.
+const notifBatchDelay = 900 * time.Millisecond
+
+// scheduleNotify queues a completed transfer for the next batched
+// notification, coalescing files that finish within notifBatchDelay of each
+// other. Flushing happens on a timer; bursts become a single "N files landed".
+func (a *App) scheduleNotify(ev server.Event) {
+	name := ev.FinalName
+	if name == "" {
+		name = ev.Filename
+	}
+	if name == "" {
+		return
+	}
+	a.notifMu.Lock()
+	a.notifPending = append(a.notifPending, name)
+	if a.notifTimer == nil {
+		a.notifTimer = time.AfterFunc(notifBatchDelay, a.flushNotify)
+	}
+	a.notifMu.Unlock()
+}
+
+// flushNotify sends one combined notification for everything queued since the
+// last flush (or since the batch timer fired).
+func (a *App) flushNotify() {
+	a.notifMu.Lock()
+	if a.notifTimer != nil {
+		a.notifTimer.Stop()
+		a.notifTimer = nil
+	}
+	files := a.notifPending
+	a.notifPending = nil
+	a.notifMu.Unlock()
+	if len(files) == 0 {
+		return
+	}
+	if !a.prefEnabled("notifications") {
+		return
+	}
+	folder := "Downloads"
+	if d := a.srvDestDir(); d != "" {
+		if base := filepath.Base(d); base != "" && base != "." && base != string(filepath.Separator) {
+			folder = base
+		}
+	}
+	a.TrayNotify("QuickDrop", notifyBody(files, folder))
+}
+
+// notifyBody turns one-or-more completed transfers into a notification body,
+// naming the destination folder they landed in.
+func notifyBody(files []string, folder string) string {
+	if len(files) == 1 {
+		return files[0] + " landed in " + folder + "."
+	}
+	return fmt.Sprintf("%d files just landed in %s.", len(files), folder)
 }
 
 // info snapshots the current session for the GUI.
@@ -198,9 +372,50 @@ func (a *App) SetDestDir(dir string) map[string]any {
 // persistConfig writes the current settings to disk.
 func (a *App) persistConfig() {
 	a.mu.Lock()
-	cfg := appConfig{DestDir: a.destDir}
+	cfg := appConfig{
+		DestDir:         a.destDir,
+		LaunchAtStartup: a.prefs["launchAtStartup"],
+		Notifications:   a.prefs["notifications"],
+		Sound:           a.prefs["sound"],
+		CloseToTray:     a.prefs["closeToTray"],
+	}
 	a.mu.Unlock()
 	saveAppConfig(cfg)
+}
+
+// Settings returns the current user-controlled preferences for the GUI.
+func (a *App) Settings() map[string]any {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	out := make(map[string]any, len(a.prefs))
+	for k, v := range a.prefs {
+		out[k] = v
+	}
+	return out
+}
+
+// SetSetting flips a single named preference (launchAtStartup, notifications,
+// sound, closeToTray), persists it, and returns the updated settings snapshot.
+func (a *App) SetSetting(key string, value bool) map[string]any {
+	switch key {
+	case "launchAtStartup", "notifications", "sound", "closeToTray":
+	default:
+		return map[string]any{"error": "Unknown setting: " + key}
+	}
+	a.mu.Lock()
+	a.prefs[key] = value
+	a.mu.Unlock()
+	a.persistConfig()
+	a.applyPreferenceSideEffects(key, value)
+	return a.Settings()
+}
+
+// applyPreferenceSideEffects performs any immediate OS-level action a setting
+// change requires (e.g. registering/unregistering launch at login).
+func (a *App) applyPreferenceSideEffects(key string, value bool) {
+	if key == "launchAtStartup" {
+		applyLaunchAtStartup(value)
+	}
 }
 
 // PickDestDir opens the native OS folder picker. Choosing a folder switches to
@@ -266,6 +481,61 @@ func (a *App) OpenFolder() {
 	default:
 		_ = exec.Command("xdg-open", dir).Start()
 	}
+}
+
+// History returns the persisted list of received files (most recent first),
+// mapped for the GUI.
+func (a *App) History() []map[string]any {
+	rows := a.history.list()
+	out := make([]map[string]any, 0, len(rows))
+	for _, r := range rows {
+		out = append(out, map[string]any{
+			"name":      r.Name,
+			"size":      r.Size,
+			"finalName": r.FinalName,
+			"path":      r.Path,
+			"at":        r.At.Unix(),
+			"shown":     shortPath(r.Path),
+		})
+	}
+	return out
+}
+
+// OpenFile opens a previously-received file with the OS default application.
+func (a *App) OpenFile(path string) {
+	if path == "" {
+		return
+	}
+	switch runtime.GOOS {
+	case "windows":
+		_ = exec.Command("explorer.exe", path).Start()
+	case "darwin":
+		_ = exec.Command("open", path).Start()
+	default:
+		_ = exec.Command("xdg-open", path).Start()
+	}
+}
+
+// RevealPath reveals a previously-received file in the OS file manager, with
+// the file selected where the platform supports it.
+func (a *App) RevealPath(path string) {
+	if path == "" {
+		return
+	}
+	switch runtime.GOOS {
+	case "windows":
+		_ = exec.Command("explorer.exe", "/select,", path).Start()
+	case "darwin":
+		_ = exec.Command("open", "-R", path).Start()
+	default:
+		_ = exec.Command("xdg-open", filepath.Dir(path)).Start()
+	}
+}
+
+// ClearHistory removes the persisted received-files history.
+func (a *App) ClearHistory() map[string]bool {
+	a.history.clear()
+	return map[string]bool{"cleared": true}
 }
 
 // plainErr converts a startup/server error into one plain-English sentence.
